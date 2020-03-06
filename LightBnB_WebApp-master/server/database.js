@@ -102,7 +102,7 @@ const getAllProperties = function(options, limit = 10) {
     let queryString = `
     SELECT properties.*, avg(property_reviews.rating) as average_rating
     FROM properties
-    JOIN property_reviews ON properties.id = property_id
+    LEFT JOIN property_reviews ON properties.id = property_id
     `;
   
     if (options.city) {
@@ -186,6 +186,9 @@ const addProperty = function(property) {
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
     RETURNING *;
   `,[property.owner_id, property.title, property.description, property.thumbnail_photo_url, property.cover_photo_url, property.cost_per_night, property.street, property.city, property.province, property.post_code, property.country, property.parking_space, property.number_of_bathrooms, property.number_of_bedrooms])
-  .then(res => res.rows.id);
+  .then(res => {
+    console.log(res.rows[0])
+    res.rows[0]});
+
 }
 exports.addProperty = addProperty;
